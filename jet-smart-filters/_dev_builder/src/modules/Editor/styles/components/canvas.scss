@@ -1,0 +1,38 @@
+.jsf-editor {
+	&__canvas {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		flex: 1;
+		overflow-y: auto;
+		padding-left: 15px;
+		padding-right: 15px;
+		background: #f0f0f1;
+
+		.block-editor-block-breadcrumb {
+			margin-left: -13px;
+			margin-right: -13px;
+		}
+	}
+
+	&__blocks {
+		width: 500px;
+		margin: 40px auto;
+		background: #fff;
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+
+		.block-editor-block-list__layout.is-root-container {
+			padding: 20px;
+			.wp-block {
+				&:not(:last-child) {
+					margin-bottom: 20px;
+				}
+				.block-editor-inner-blocks {
+					.wp-block {
+						margin-bottom: 0;
+					}
+				}
+			}
+		}
+	}
+}
