@@ -137,7 +137,16 @@ add_action('admin_post_dp_save_form', 'dp_save_form');
 */
 
 
+add_action('wp_enqueue_scripts', 'dp_enqueue_frontend_scripts');
 
+function dp_enqueue_frontend_scripts(){
+    wp_enqueue_style(
+        'dp-form-builder-style',
+        plugin_dir_url(__FILE__) . 'assets/admin.css',
+        [],
+        '1.0.0'
+    );
+}
 
 
 
@@ -180,7 +189,7 @@ function dp_create_form_admin_page(){
 
 
 
-/*---------- Save Form ----------*/
+/*---------- Admin Side Save Form ,,, It save form structure in the CPT dp_forms ( All Forms) ----------*/
 
 add_action('admin_post_dp_save_form', 'dp_save_form');
 
@@ -238,7 +247,7 @@ function dp_save_form(){
     exit;
 }
 
-
+/* -------- Shortcode to render form on frontend ---------*/
 
 add_shortcode('dp_form', 'dp_render_form_shortcode');
 
@@ -257,6 +266,8 @@ function dp_render_form_shortcode($atts) {
     if ( empty($fields) || ! is_array($fields) ) {
         return '<p><strong>No fields found for this form.</strong></p>';
     }
+
+
 
     ob_start();
     ?>
@@ -292,7 +303,7 @@ function dp_render_form_shortcode($atts) {
             </div>
         <?php endforeach; ?>
 
-        <button type="submit">Submit</button>
+        <button type="submit" class="dp-submit-button">Submit</button>
     </form>
     <?php
     return ob_get_clean();
@@ -379,7 +390,8 @@ function dp_log_form_submissions(){
         foreach($fields as $field){
             $field_name =  $field['name'];
             if(isset($_POST[$field_name])){
-                $submission_data[$field_name] = sanitize_text_field($_POST[$field_name]);
+                $value = sanitize_text_field($_POST[$field_name]);
+                $submission_data[$field_name] = $value;
             }
         }
 
@@ -389,7 +401,7 @@ function dp_log_form_submissions(){
             [
                 'post_type' => 'dp_form_submissions',
                 'post_title' => 'Submission for Form ID ' . $form_id,
-                'post_content' => maybe_serialize($submission_data),
+               
                 'post_status' => 'publish'
             ]
         );
@@ -401,12 +413,11 @@ function dp_log_form_submissions(){
 
          // Save meta
         update_post_meta($submission_id, '_dp_form_id', $form_id);
-        update_post_meta($submission_id, '_dp_submission_data', $submission_data);
+      
 
-        wp_update_post([
-            'ID'           => $submission_id,
-            'post_content' => print_r($submission_data, true),
-        ]);
+        foreach($submission_data as $key => $value){
+            update_post_meta($submission_id, sanitize_key($key), $value);
+        }
 
 
 
@@ -429,3 +440,42 @@ add_action('manage_dp_form_submission_posts_custom_column', function ($column, $
         echo $form_id ? esc_html(get_the_title($form_id)) : '—';
     }
 }, 10, 2);
+
+
+
+//Meta boxes for submission details
+
+add_action('add_meta_boxes', 'dp_add_submission_metabox');
+
+function dp_add_submission_metabox() {
+
+    add_meta_box(
+        'dp_submission_data',
+        'Form Submission Data',
+        'dp_render_submission_metabox',
+        'dp_form_submissions',
+        'normal',
+        'high'
+    );
+}
+
+
+function dp_render_submission_metabox($post) {
+
+    $meta = get_post_meta($post->ID);
+
+    echo '<div class="dp-submission-data">';
+
+    foreach ($meta as $key => $value) {
+
+        // Skip internal/meta system fields
+        if ( strpos($key, '_') === 0 ) continue;
+
+        echo '<p>
+                <strong>' . esc_html(ucwords(str_replace('_', ' ', $key))) . ':</strong>
+                ' . esc_html($value[0]) . '
+              </p>';
+    }
+
+    echo '</div>';
+}
