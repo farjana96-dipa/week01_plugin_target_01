@@ -53,9 +53,6 @@ class Updater {
 		add_filter( 'plugins_api', array( $this, 'get_plugin_info' ), 10, 3 );
 		add_filter( 'upgrader_post_install', array( $this, 'upgrader_post_install' ), 10, 3 );
 
-		// set timeout
-		add_filter( 'http_request_timeout', array( $this, 'http_request_timeout' ) );
-
 		// set sslverify for zip download
 		add_filter( 'http_request_args', array( $this, 'http_request_sslverify' ), 10, 2 );
 	}
@@ -118,17 +115,6 @@ class Updater {
 		if ( ! isset( $this->config['readme'] ) )
 			$this->config['readme'] = 'README.md';
 
-	}
-
-
-	/**
-	 * Callback fn for the http_request_timeout filter
-	 *
-	 * @since 1.0
-	 * @return int timeout value
-	 */
-	public function http_request_timeout() {
-		return 2;
 	}
 
 	/**
@@ -215,7 +201,8 @@ class Updater {
 			$query = add_query_arg( array( 'access_token' => $this->config['access_token'] ), $query );
 
 		$raw_response = wp_remote_get( $query, array(
-			'sslverify' => $this->config['sslverify']
+			'sslverify' => $this->config['sslverify'],
+			'timeout'   => 2,
 		) );
 
 		return $raw_response;

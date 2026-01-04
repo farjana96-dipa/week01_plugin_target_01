@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<ruleset name="DP Custom Form Builder">
+    <description>PHPCS config for DP Custom Form Builder</description>
+
+    <rule ref="WordPress" />
+
+    <file>.</file>
+
+    <exclude-pattern>vendor/*</exclude-pattern>
+</ruleset>

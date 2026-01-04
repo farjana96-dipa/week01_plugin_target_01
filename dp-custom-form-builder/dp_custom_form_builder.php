@@ -3,138 +3,34 @@
 
 /*
 
-Plugin Name: DP Custom Form Builder
-Description: Custom form builder plugin with submissions CPT
-Version: 1.0
-Author: Farjana Dipa
-text-domain: dp-custom-form-builder
-
-
-
-*/
-
-
+ * Plugin Name: DP Custom Form Builder
+ * Description: Lightweight custom form builder with submissions management.
+ * Version: 1.0.0
+ * Author: Farjana Dipa
+ * Text Domain: dp-custom-form-builder
+ * Domain Path: /languages
+ */
 
 if(!defined('ABSPATH')) exit;
 
-
-/*------------- CPT for Form Submissions -------------*/
-/*
-add_action('init', 'dp_custom_form_submission_cpt', 0);
+define('DP_CFB_PATH', plugin_dir_path(__FILE__));
+define('DP_CFB_URL', plugin_dir_url(__FILE__));
 
 
-function dp_custom_form_submission_cpt(){
-    register_post_type('dp_form_builder', [
-        'labels' => [
-            'name' => 'Form Submissions',
-            'singular_name' => 'Form Submission',
-        ],
-        'public' => false,
-        'show_ui' => true,
-        'show_in_menu' => false,
-        'menu_icon' => 'dashicons-email-alt',
-        'supports' => ['title', 'editor'],
-    ]);
-}
-*/
+//Include necessary files
 
-/*------------- End CPT -------------*/
-
-/*------------- Admin Menu + Submenu -------------*/
+require_once DP_CFB_PATH . 'includes/cpt-forms.php';
+require_once DP_CFB_PATH . 'includes/cpt-submissions.php';
+require_once DP_CFB_PATH . 'includes/admin-menu.php';
+require_once DP_CFB_PATH . 'includes/form-save.php';
+require_once DP_CFB_PATH . 'includes/form-submit.php';
+require_once DP_CFB_PATH . 'includes/shortcode.php';
 
 
-/*
-// Hook admin menu
-add_action('admin_menu', 'dp_register_admin_menu');
-
-function dp_register_admin_menu() {
-
-    add_menu_page(
-        'DP Custom Forms',
-        'DP Custom Forms',
-        'manage_options',
-        'dp-form-plugin',
-        'dp_main_admin_page',
-        'dashicons-feedback'
-    );
-
-    add_submenu_page(
-        'dp-form-plugin',
-        'Create Form',
-        'Create Form',
-        'manage_options',
-        'create-form',
-        'dp_create_form_page'
-    );
-}
-
-function dp_main_admin_page() {
-    include plugin_dir_path(__FILE__) . 'admin/admin-page.php';
-}
-
-function dp_create_form_page() {
-    include plugin_dir_path(__FILE__) . 'admin/admin-page.php';
-}
-
-*/
-/* ------------- End Admin Menu -------------*/
-
-/*
-
-function dp_save_form() {
-
-    // Security check
-    if (
-        ! isset($_POST['dp_nonce']) ||
-        ! wp_verify_nonce($_POST['dp_nonce'], 'dp_save_form')
-    ) {
-        wp_die('Security check failed');
-    }
-
-    if ( ! current_user_can('manage_options') ) {
-        wp_die('Permission denied');
-    }
-
-    // Sanitize form name
-    $form_name = sanitize_text_field($_POST['form_name']);
-
-    // Insert form post
-    $form_id = wp_insert_post([
-        'post_type'   => 'dp_form_builder',
-        'post_title'  => $form_name,
-        'post_status' => 'publish'
-    ]);
-
-    if ( is_wp_error($form_id) ) {
-        wp_die($form_id->get_error_message());
-    }
-
-    // Sanitize fields
-    $fields = [];
-
-    if ( isset($_POST['fields']) && is_array($_POST['fields']) ) {
-        foreach ($_POST['fields'] as $field) {
-            $fields[] = [
-                'type'     => sanitize_text_field($field['type']),
-                'label'    => sanitize_text_field($field['label']),
-                'name'     => sanitize_key($field['name']),
-                'required' => isset($field['required']) ? 1 : 0,
-            ];
-        }
-    }
-
-    update_post_meta($form_id, '_dp_fields', $fields);
-
-    // 🔁 REDIRECT (VERY IMPORTANT)
-        wp_redirect(
-            admin_url('admin.php?page=create-form&saved=1')
-        );
-        exit;
-
-}
-add_action('admin_post_dp_save_form', 'dp_save_form');
-
-*/
+add_filter( 'admin_title', function ( $title ) {
+    return is_string( $title ) ? $title : '';
+}, 10, 1 );
+/* 
 
 
 add_action('wp_enqueue_scripts', 'dp_enqueue_frontend_scripts');
@@ -151,7 +47,7 @@ function dp_enqueue_frontend_scripts(){
 
 
 /*---------- Admin + Submenu ----------*/
-
+/*
 
 add_action('admin_menu', 'dp_register_admin_menu');
 
@@ -182,7 +78,7 @@ function dp_create_form_admin_page(){
     include( plugin_dir_path(__FILE__) . 'admin/admin-page.php' );
 }
 
-
+*/
 
 /* -------- End Admin + Submenu ---------*/
 
@@ -190,7 +86,7 @@ function dp_create_form_admin_page(){
 
 
 /*---------- Admin Side Save Form ,,, It save form structure in the CPT dp_forms ( All Forms) ----------*/
-
+/*
 add_action('admin_post_dp_save_form', 'dp_save_form');
 
 
@@ -246,8 +142,10 @@ function dp_save_form(){
 
     exit;
 }
+    */
 
 /* -------- Shortcode to render form on frontend ---------*/
+/*
 
 add_shortcode('dp_form', 'dp_render_form_shortcode');
 
@@ -343,10 +241,12 @@ add_action('manage_dp_forms_posts_custom_column', function ($column, $post_id) {
 }, 10, 2);
 
 
-
+*/
 
 
 /*--------- CPT for Form Submissions ---------*/
+
+/*
 
 add_action('init', 'dp_custom_form_builder_cpt', 0);
 
@@ -365,7 +265,11 @@ function dp_custom_form_builder_cpt(){
     ]);
 }
 
+*/
+
 /* -------- End CPT ---------*/
+
+/*
 
 add_action('init', 'dp_log_form_submissions');
 
@@ -401,7 +305,7 @@ function dp_log_form_submissions(){
             [
                 'post_type' => 'dp_form_submissions',
                 'post_title' => 'Submission for Form ID ' . $form_id,
-               
+                
                 'post_status' => 'publish'
             ]
         );
@@ -411,9 +315,7 @@ function dp_log_form_submissions(){
             wp_die($submission_id->get_error_message());
         }
 
-         // Save meta
-        update_post_meta($submission_id, '_dp_form_id', $form_id);
-      
+        //Save submission data as post meta
 
         foreach($submission_data as $key => $value){
             update_post_meta($submission_id, sanitize_key($key), $value);
@@ -479,3 +381,6 @@ function dp_render_submission_metabox($post) {
 
     echo '</div>';
 }
+
+
+*/

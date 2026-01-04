@@ -1,4 +1,4 @@
-/*! pro-elements -v3.33.0 - 03-12-2025 */
+/*! pro-elements- v3.34.0 - 22-12-2025 */
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["frontend"],{
 
 /***/ "../assets/dev/js/frontend/frontend.js":
