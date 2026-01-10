@@ -66,7 +66,7 @@ if(empty($fields) || !is_array($fields)){
 add_filter('post_row_actions', function($actions, $post) {
     if ($post->post_type === 'dp_form_submissions') {
         $view_url = admin_url('admin.php?page=dp-view-submission&id=' . $post->ID);
-        $actions['view_submission'] = '<a href="' . esc_url($view_url) . '">' . __('View', 'dp-custom-form-builder') . '</a>';
+        $actions['view_submission'] = '<a href="' . esc_url($view_url) . '">' . 'View' . '</a>';
     }
     return $actions;
 }, 10, 2);
