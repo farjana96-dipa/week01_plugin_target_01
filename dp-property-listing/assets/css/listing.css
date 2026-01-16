@@ -1,0 +1,47 @@
+.dp-listing{
+    background-color: aliceblue;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    width: 50%;
+    
+}
+
+
+.dp-listing .dp-thumb img{
+    border-radius: 12px;
+}
+
+.dp-listing .dp-title{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 25px;
+    font-weight: 700;
+    color: #000;
+    margin-top: 30px;
+}
+
+
+.dp-listing .dp-excerpt{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    color: #000;
+    line-height: 30px;
+    font-weight: 400;
+}
+
+.dp-listing .dp-btn .read-more-btn{
+    background-color: maroon;
+    color: #fff;
+    padding: 12px 35px;
+    border-radius: 35px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+
+button {
+    all: unset;
+}
+button {
+    all: revert;
+}

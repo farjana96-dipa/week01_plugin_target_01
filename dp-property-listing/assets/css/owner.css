@@ -1,0 +1,10 @@
+.dp-property-owner .owner-card{
+    width: 50%;
+    background-color: aliceblue;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+body{
+    background-color: red;
+}
